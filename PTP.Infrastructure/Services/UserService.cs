@@ -2,6 +2,7 @@
 using PTP.Core.Common;
 using PTP.Core.Dtos;
 using PTP.Core.Services;
+using PTP.Infrastructure.RequestAdapterPattern;
 using PTP.Proxies.Comon.DtosResult;
 using PTP.Proxies.Proxies.ProxyAbstractions;
 using PTP.Proxies.Proxies.Request;
@@ -16,28 +17,22 @@ namespace PTP.Infrastructure.Services
     {
         private readonly IUserProxy _usersClient;
         private readonly IConfiguration Config;
+        private readonly ISecurityAdapterPattern _SecurityAdapterPattern;
 
 
-        public UserService(IUserProxy userProxy, IConfiguration config)
+        public UserService(IUserProxy userProxy, IConfiguration config, ISecurityAdapterPattern SecurityAdapterPattern)
 
         {
             _usersClient = userProxy;
             Config = config;
-
+            _SecurityAdapterPattern = SecurityAdapterPattern;
         }
         public async Task<ResultEntity<LoginResultDtos>> Login(LoginDtos login)
         {
-            var Header = Config["SecurityApi:ApiKey"];
-            LoginRequest loginRequestBodey = new LoginRequest()
-            {
-                username = login.Username,
-                Pssword = login.Password
-            };
-            var result = (await _usersClient.login(Header, loginRequestBodey));
-            ResultEntity<LoginResultDtos> resultEntity = new ResultEntity<LoginResultDtos>(result.IsSuccess,
-               result.Message, result.Payload, result.StatusCode);
 
-            return resultEntity;
+            //TO decoupled between Ptp To ProxyLayer Use Adapter Design Pattern
+
+            return await _SecurityAdapterPattern.securityLoginApiAdapter(login);
         }
     }
 }

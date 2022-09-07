@@ -14,6 +14,8 @@ using PTP.Data.SQL.Repositories;
 using PTP.Infrastructure.AutoMapper;
 using PTP.Infrastructure.EntitySpecification;
 using PTP.Infrastructure.Middlwars;
+using PTP.Infrastructure.RequestAdapterPattern;
+using PTP.Infrastructure.RequestAdapterPattern.Secuirity;
 using PTP.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
@@ -27,6 +29,7 @@ namespace PTP.Infrastructure.Extinsions
         public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<DbContext, DbContextTest>();
+            services.AddScoped<ISecurityAdapterPattern, SecurityAdapterPattern>();
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<ICleintServices, CleintServices>();
             services.AddScoped<IUserService, UserService>();
