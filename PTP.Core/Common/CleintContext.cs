@@ -19,7 +19,7 @@ namespace PTP.Core.Common
         {
             throw new NotImplementedException();
         }
-
+        
         public string GetFirstNameAr()
         {
             throw new NotImplementedException();
