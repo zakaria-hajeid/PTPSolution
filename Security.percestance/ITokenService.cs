@@ -10,5 +10,6 @@ namespace Security.percestance
     public interface ITokenService
     {
         Task<LoginResult> CreateJwtTokenn(Users loginInformation, IList<string> Roles);
+
     }
 }

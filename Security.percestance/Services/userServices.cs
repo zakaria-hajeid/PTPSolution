@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PTP.Core.Common.Enums;
 using PTP.Proxies.Proxies.Request;
 using Security.Application.Repository;
 using Security.Core.Dtos;
 using Security.Core.Entities;
+using Security.percestance.Token;
+using Security.percestance.Token.Enums;
+using Security.percestance.Token.TokenCreateStrategy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,15 +24,19 @@ namespace Security.percestance.Services
         private readonly UserManager<Users> _userManager;
         private readonly SignInManager<Users> _signInManager;
         private readonly ITokenService tokenServices;
+        private TokenStrategyContext tokenStrategyContext;
+        private readonly IConfiguration _config;
+
 
         public userServices(IMapper mapper, IUserRepo userRepo, UserManager<Users> userManager,
-            SignInManager<Users> signInManager, ITokenService tokenServices)
+            SignInManager<Users> signInManager, ITokenService tokenServices, IConfiguration config)
         {
             _mapper = mapper;
             _UserRepo = userRepo;
             _signInManager = signInManager;
             _userManager = userManager;
             this.tokenServices = tokenServices;
+            _config = config;
         }
         public async Task<int> CreatUser(CreateUserDto user)
         {
@@ -42,6 +50,15 @@ namespace Security.percestance.Services
             }
             else
                 return (int)AddEntityStatus.failer;
+        }
+
+        private IGenerateToken TokenFactoryMethod(TokenType type)
+        {
+            if (type == TokenType.JWT)
+                return new JwtTokenStrategy(_config);
+            else
+                return new JwtTokenStrategy(_config);
+
         }
 
         public async Task<LoginResult> login(LoginRequest user)
@@ -58,11 +75,13 @@ namespace Security.percestance.Services
 
                   );
                     IList<string> Roles = await _userManager.GetRolesAsync(appUser);
-
-                    var TokenObj = await tokenServices.CreateJwtTokenn(appUser, Roles);
+                    // use the stretagy pattern to create the jwt Token
+                    tokenStrategyContext = new TokenStrategyContext(TokenFactoryMethod(TokenType.JWT));
+                    object token = await tokenStrategyContext.CreateToken(appUser, Roles);
+                    //var TokenObj = await tokenServices.CreateJwtTokenn(appUser, Roles);
                     return new LoginResult()
                     {
-                        Token = TokenObj.Token
+                        Token = (string)token
                     };
                 }
                 else

@@ -30,7 +30,7 @@ namespace PTP.Infrastructure.Services
         public async Task<ResultEntity<LoginResultDtos>> Login(LoginDtos login)
         {
 
-            //TO decoupled between Ptp To ProxyLayer Use Adapter Design Pattern
+            //TO decoupled between Ptp and ProxyLayer Use Adapter Design Pattern
 
             return await _SecurityAdapterPattern.securityLoginApiAdapter(login);
         }
