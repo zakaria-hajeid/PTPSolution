@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PTP.Core.Common.Enums;
+using PTP.Core.Repositores;
+using PTP.Proxies.Comon.DtosResult;
 using PTP.Proxies.Proxies.Request;
 using Security.Application.Repository;
+using Security.Core.Context;
 using Security.Core.Dtos;
 using Security.Core.Entities;
 using Security.percestance.Token;
@@ -26,10 +29,15 @@ namespace Security.percestance.Services
         private readonly ITokenService tokenServices;
         private TokenStrategyContext tokenStrategyContext;
         private readonly IConfiguration _config;
+        private readonly DataContext _Db;
+        private readonly IUnitOfWork<DataContext> UnitOfwork;
+
 
 
         public userServices(IMapper mapper, IUserRepo userRepo, UserManager<Users> userManager,
-            SignInManager<Users> signInManager, ITokenService tokenServices, IConfiguration config)
+            SignInManager<Users> signInManager, ITokenService tokenServices, IConfiguration config, DataContext Db
+
+            , IUnitOfWork<DataContext> UnitOfwork)
         {
             _mapper = mapper;
             _UserRepo = userRepo;
@@ -37,13 +45,15 @@ namespace Security.percestance.Services
             _userManager = userManager;
             this.tokenServices = tokenServices;
             _config = config;
+            _Db = Db;
+            this.UnitOfwork = UnitOfwork;  
         }
         public async Task<int> CreatUser(CreateUserDto user)
         {
             user.PhoneNumber = "00962790360186";
             user.Email = "Zakarialhajeid1998@gmail.com";
             Users userToAdd = _mapper.Map<Users>(user);
-            IdentityResult userToAddResult = await _UserRepo.AddUser(userToAdd,user.Password);
+            IdentityResult userToAddResult = await _UserRepo.AddUser(userToAdd, user.Password);
             if (userToAddResult.Succeeded)
             {
                 return userToAdd.Id;
@@ -55,9 +65,9 @@ namespace Security.percestance.Services
         private IGenerateToken TokenFactoryMethod(TokenType type)
         {
             if (type == TokenType.JWT)
-                return new JwtTokenStrategy(_config);
+                return new JwtTokenStrategy(_config, _Db, UnitOfwork);
             else
-                return new JwtTokenStrategy(_config);
+                return new JwtTokenStrategy(_config, _Db, UnitOfwork);
 
         }
 
@@ -66,7 +76,7 @@ namespace Security.percestance.Services
             try
             {
                 Users User = await _userManager.FindByNameAsync(user.username);
-                 SignInResult result = await _signInManager.CheckPasswordSignInAsync(User, user.Pssword, false);
+                SignInResult result = await _signInManager.CheckPasswordSignInAsync(User, user.Pssword, false);
 
                 if (result.Succeeded)
                 {
@@ -76,12 +86,16 @@ namespace Security.percestance.Services
                   );
                     IList<string> Roles = await _userManager.GetRolesAsync(appUser);
                     // use the stretagy pattern to create the jwt Token
+
+                    string refreshToken = await tokenServices.CreateRefreshToken();
                     tokenStrategyContext = new TokenStrategyContext(TokenFactoryMethod(TokenType.JWT));
-                    object token = await tokenStrategyContext.CreateToken(appUser, Roles);
+                    object token = await tokenStrategyContext.CreateToken(appUser, Roles, refreshToken);
                     //var TokenObj = await tokenServices.CreateJwtTokenn(appUser, Roles);
                     return new LoginResult()
                     {
-                        Token = (string)token
+                        Token = (string)token.GetType()?.GetProperty("token")?.GetValue(token),
+                        RefreshToken = (string)token.GetType()?.GetProperty("refreshToken")?.GetValue(token)
+
                     };
                 }
                 else
@@ -93,11 +107,36 @@ namespace Security.percestance.Services
 
                 }
             }
-           catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
 
+        }
+
+        public async Task<LoginResult> RefreshToken(LoginResultDtos TokenModel)
+        {
+
+            string accessToken = TokenModel.Token;
+            string refreshToken = TokenModel.RefreshToken;
+            var principal = await tokenServices.GetClaimToken(accessToken);
+            var username =  principal.Identity.Name; //this is mapped to the Name claim by default
+            var user = await _Db.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+                return null;
+            IList<string> Roles = await _userManager.GetRolesAsync(user);
+
+            tokenStrategyContext = new TokenStrategyContext(TokenFactoryMethod(TokenType.JWT));
+            string refreshTokenCreate = await tokenServices.CreateRefreshToken();
+
+            object token = await tokenStrategyContext.CreateToken(user, Roles, refreshTokenCreate);
+
+            return new LoginResult()
+            {
+                Token = (string)token.GetType()?.GetProperty("token")?.GetValue(token),
+                RefreshToken = (string)token.GetType()?.GetProperty("refreshToken")?.GetValue(token)
+
+            };
         }
     }
 }

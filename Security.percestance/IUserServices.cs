@@ -1,4 +1,5 @@
-﻿using PTP.Proxies.Proxies.Request;
+﻿using PTP.Proxies.Comon.DtosResult;
+using PTP.Proxies.Proxies.Request;
 using Security.Core.Dtos;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,7 @@ namespace Security.percestance
     {
         Task<int> CreatUser(CreateUserDto user);
         Task<LoginResult> login(LoginRequest user);
+        Task<LoginResult> RefreshToken(LoginResultDtos TokenModel);
+
     }
 }

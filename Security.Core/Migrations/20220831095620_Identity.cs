@@ -41,7 +41,10 @@ namespace Security.Core.Migrations
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(100)", maxLength: 256, nullable: true),
+                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime", nullable: true),
+
                 },
                 constraints: table =>
                 {

@@ -12,8 +12,10 @@ namespace PTP.Core.Repositores
         Task<int> CommitAsync(CancellationToken cancellationToken = default(CancellationToken));
         Task<IDbContextTransaction> BeginTransaction();
         Task CommitTransaction(IDbContextTransaction transaction);
+        Task SaveCurrentChanges();
         Task RollbackTransaction(IDbContextTransaction transaction);
         public IDbContextTransaction GetCurrentTransaction();
+
         public bool HasActiveTransaction();
         public T context { get; set; }
 

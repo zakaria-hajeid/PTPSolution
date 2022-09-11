@@ -10,5 +10,7 @@ namespace PTP.Core.Services
 {
     public interface IUserService { 
         Task<ResultEntity<LoginResultDtos>> Login(LoginDtos login);
+        Task<ResultEntity<LoginResultDtos>> RefreshToken(LoginResultDtos RefreShTokenModel);
+
     }
 }

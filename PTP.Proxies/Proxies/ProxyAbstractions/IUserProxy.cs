@@ -22,5 +22,11 @@ namespace PTP.Proxies.Proxies.ProxyAbstractions
         [Post("/Auth/Login")]
         Task<ResultEntity<LoginResultDtos>> login([Header("SecurityApiKey")] string ApiKey, [Body] LoginRequest user);
 
+
+
+        [Post("/Auth/RefreshToken")]
+        Task<ResultEntity<LoginResultDtos>> RefreshToken([Header("SecurityApiKey")] string ApiKey, [Body] LoginResultDtos user);
+
+
     }
 }

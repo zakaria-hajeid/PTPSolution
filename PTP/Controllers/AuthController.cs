@@ -26,5 +26,13 @@ namespace PTP.Controllers
             var Response = await _userService.Login(loginDtos);
             return StatusCode(StatusCodes.Status201Created, Response);
         }
+
+        [HttpPost("refreshToken")]
+        public async Task<ActionResult<ResultEntity<LoginResultDtos>>> RefreshToken([FromBody] LoginResultDtos RefreShTokenModel)
+        {
+            var Response = await _userService.RefreshToken(RefreShTokenModel);
+            return StatusCode(StatusCodes.Status201Created, Response);
+        }
+
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using PTP.Core.Repositores;
+using Security.Core.Context;
 using Security.Core.Dtos;
 using Security.Core.Entities;
 using Security.percestance.Token.TokenCreateStrategy;
@@ -16,10 +18,14 @@ namespace Security.percestance.Token
     {
         private readonly IConfiguration _config;
 
-       
-        public JwtTokenStrategy(IConfiguration config)
+        private readonly DataContext _Db;
+        private readonly IUnitOfWork<DataContext> UnitOfwork;
+
+        public JwtTokenStrategy(IConfiguration config, DataContext Db, IUnitOfWork<DataContext> UnitOfwork)
         {
             _config = config;
+            _Db = Db;
+            this.UnitOfwork = UnitOfwork;   
         }
         public  Task<object> CreateToken(params object[] Credentials)
         {
@@ -50,7 +56,12 @@ namespace Security.percestance.Token
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             object tokens = tokenHandler.WriteToken(token);
-            return Task.FromResult(tokens);
+            var refreshToken = Credentials[2] as string;
+            loginInformation.RefreshToken = refreshToken;
+            loginInformation.RefreshTokenExpiryTime = DateTime.Now.AddDays(10);
+            _Db.Users.Update(loginInformation);
+            UnitOfwork.SaveCurrentChanges();
+            return Task.FromResult( new { token = tokens , refreshToken= refreshToken } as object);
         }
     }
 }

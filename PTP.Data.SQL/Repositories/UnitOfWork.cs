@@ -32,8 +32,14 @@ namespace PTP.Data.SQL.Repositories
             return _currentTransaction;
         }
         public async Task CommitTransaction(IDbContextTransaction transaction)
+            
         {
+            await Context.SaveChangesAsync();
             await transaction.CommitAsync();
+        }
+        public async Task SaveCurrentChanges()
+        {
+            await Context.SaveChangesAsync();
         }
         public async Task RollbackTransaction(IDbContextTransaction transaction)
         {

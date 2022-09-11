@@ -45,9 +45,6 @@ namespace PTP.Controllers
             return await _Service.Create(entity);
         }
 
-      
-
-
 
         protected TDestination MapProperties<TDestination>(object source)
       where TDestination : class, new()

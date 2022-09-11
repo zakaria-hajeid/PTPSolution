@@ -34,5 +34,10 @@ namespace PTP.Infrastructure.Services
 
             return await _SecurityAdapterPattern.securityLoginApiAdapter(login);
         }
+
+        public async Task<ResultEntity<LoginResultDtos>> RefreshToken(LoginResultDtos RefreShTokenModel)
+        {
+            return await _SecurityAdapterPattern.securityRefreshTokenApiAdapter(RefreShTokenModel);
+        }
     }
 }

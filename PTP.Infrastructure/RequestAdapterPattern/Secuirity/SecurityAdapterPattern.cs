@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.SecurityTokenService;
 using PTP.Core.Common;
 using PTP.Core.Dtos;
 using PTP.Proxies.Comon.DtosResult;
@@ -33,6 +34,25 @@ namespace PTP.Infrastructure.RequestAdapterPattern.Secuirity
                 Pssword = login.Password
             };
             var result = (await _usersClient.login(Header, loginRequestBodey));
+            ResultEntity<LoginResultDtos> resultEntity = new ResultEntity<LoginResultDtos>(result.IsSuccess,
+                         result.Message, result.Payload, result.StatusCode);
+
+            return resultEntity;
+        }
+
+        public async Task<ResultEntity<LoginResultDtos>> securityRefreshTokenApiAdapter(LoginResultDtos RefreShTokenModel)
+        {
+            var Header = Config["SecurityApi:ApiKey"];
+            LoginResultDtos TokenModel = new LoginResultDtos()
+            {
+                Token = RefreShTokenModel.Token,
+                RefreshToken = RefreShTokenModel.RefreshToken
+            };
+            var result = (await _usersClient.RefreshToken(Header, TokenModel));
+            if (result is null)
+            {
+                throw new  BadRequestException();
+            }
             ResultEntity<LoginResultDtos> resultEntity = new ResultEntity<LoginResultDtos>(result.IsSuccess,
                          result.Message, result.Payload, result.StatusCode);
 

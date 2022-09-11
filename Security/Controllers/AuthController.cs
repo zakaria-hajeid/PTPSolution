@@ -52,12 +52,26 @@ namespace Security.Controllers
             LoginResult Token = await _userServices.login(user);
 
                 if (Token != null)
-                return Ok(ResultEntity<LoginResultDtos>.Succeeded("", new LoginResultDtos() { Token=Token.Token}));
+                return Ok(ResultEntity<LoginResultDtos>.Succeeded("", new LoginResultDtos() { Token=Token.Token,RefreshToken= Token .RefreshToken}));
             else
 
                 return Ok(ResultEntity<string>.Failed("falid to CreateToken", ""));
 
         }
+
+        [HttpPost("RefreshToken")]
+        public async Task<ActionResult<ResultEntity<LoginResultDtos>>> RefreshToken(LoginResultDtos TokenRefreshModel)
+        {
+            LoginResult Token = await _userServices.RefreshToken(TokenRefreshModel);
+
+            if (Token != null)
+                return Ok(ResultEntity<LoginResultDtos>.Succeeded("", new LoginResultDtos() { Token = Token.Token, RefreshToken = Token.RefreshToken }));
+            else
+
+                return Ok(ResultEntity<string>.Failed("falid to CreateToken", ""));
+
+        }
+
     }
 }
 

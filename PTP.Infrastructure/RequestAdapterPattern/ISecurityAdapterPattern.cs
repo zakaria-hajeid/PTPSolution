@@ -11,5 +11,7 @@ namespace PTP.Infrastructure.RequestAdapterPattern
     public interface ISecurityAdapterPattern
     {
         Task<ResultEntity<LoginResultDtos>> securityLoginApiAdapter(LoginDtos login);
+        Task<ResultEntity<LoginResultDtos>> securityRefreshTokenApiAdapter(LoginResultDtos LoginResultDtos);
+
     }
 }

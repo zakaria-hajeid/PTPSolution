@@ -7,5 +7,7 @@ namespace PTP.Proxies.Comon.DtosResult
     public class LoginResultDtos
     {
         public string Token { get; set; }
+        public string RefreshToken { get; set; }
+
     }
 }
