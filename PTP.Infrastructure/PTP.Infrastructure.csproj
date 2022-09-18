@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PTP.Core\PTP.Core.csproj" />
     <ProjectReference Include="..\PTP.Data.SQL\PTP.Data.SQL.csproj" />
+    <ProjectReference Include="..\PTP.DistributedCash\PTP.DistributedCash.csproj" />
     <ProjectReference Include="..\Security.Core\Security.Core.csproj" />
     <ProjectReference Include="..\Security.percestance\Security.percestance.csproj" />
   </ItemGroup>

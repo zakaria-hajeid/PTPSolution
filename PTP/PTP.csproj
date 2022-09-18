@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +12,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PTP.Core\PTP.Core.csproj" />
+    <ProjectReference Include="..\PTP.DistributedCash\PTP.DistributedCash.csproj" />
     <ProjectReference Include="..\PTP.Infrastructure\PTP.Infrastructure.csproj" />
+    <ProjectReference Include="..\PTP.Queuing.RabbitMqService\PTP.Queuing.RabbitMqService.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="KoalaKit.Abstractions">
+      <HintPath>C:\Users\Zakariaba.MOJ\source\repos\koalakit-core\src\messaging\queuing\KoalaKit.Queuing.RabbitMq\bin\Debug\net6.0\KoalaKit.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="KoalaKit.Queuing.RabbitMq">
+      <HintPath>C:\Users\Zakariaba.MOJ\source\repos\koalakit-core\src\messaging\queuing\KoalaKit.Queuing.RabbitMq\bin\Debug\net6.0\KoalaKit.Queuing.RabbitMq.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 

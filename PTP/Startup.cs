@@ -1,3 +1,5 @@
+using KoalaKit.Extensions;
+using KoalaKit.Queuing.RabbitMq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,10 +13,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PTP.Infrastructure.Extinsions;
 using PTP.Infrastructure.Middlwars;
+using PTP.DistributedCash.Extinsions;
+using PTP.Queuing.RabbitMqService.Extinsions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PTP
@@ -31,10 +37,16 @@ namespace PTP
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.WriteIndented = true;
+            }) ;
+           
             services.RegisterServices(Configuration);
             services.RegisteRefitSecurityServices(Configuration);
             services.AddSwaggerGen();
+            //services.ConfigreRabitService(Configuration);
+            services.ConfigreCashing(Configuration);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
      .AddJwtBearer(Options =>

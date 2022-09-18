@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Koalakit.Abstractions" Version="1.0.10-alpha" />
+    <PackageReference Include="KoalaKit.Caching.Redis" Version="1.0.10-alpha" />
+  </ItemGroup>
+
+</Project>
