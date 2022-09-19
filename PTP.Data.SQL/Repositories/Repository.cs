@@ -12,11 +12,16 @@ namespace PTP.Data.SQL.Repositories
     public class Repository<TEntity, TEntityFilter> : IDisposable, IRepositories<TEntity, TEntityFilter> where TEntity : EntityBase where TEntityFilter : EntityBaseFilter
     {
 
-            protected readonly DbContext _context;
+        protected readonly DbContext _context;
 
         private DbSet<TEntity> Dbset
         {
-            get { return _context.Set<TEntity>(); }
+            get
+            {
+                return _context.Set<TEntity>();
+
+            }
+
         }
 
         public Repository(DbContext context)
@@ -25,10 +30,10 @@ namespace PTP.Data.SQL.Repositories
         }
         public async Task<int> Create(TEntity entity)
         {
-            
-             var entityId = await Dbset.AddAsync(entity);
-                return entityId.Entity.Id;
-            
+
+            var entityId = await Dbset.AddAsync(entity);
+            return entityId.Entity.Id;
+
         }
 
 

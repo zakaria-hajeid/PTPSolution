@@ -62,7 +62,6 @@ namespace PTP.Controllers
               IServiceProvider ServiceProvider=serviceCollection.BuildServiceProvider();
               var Publisher = contextAccessor.HttpContext.RequestServices.GetService<IQuenigService<CreateUserMessage>>();
              await Publisher.PublishToMQ(message); */
-
         }
         protected ICleintServices cleintServices
         {

@@ -24,34 +24,31 @@ namespace PTP.Infrastructure.Services
 
             ResultEntity<T> result = null;
             var transaction = await UnitOfWork.BeginTransaction();
-           
-                result = await func();
 
-                if (result.IsSuccess)
-                {
-                    await UnitOfWork.CommitTransaction(transaction);
-                }
-                else
-                {
-                    await UnitOfWork.RollbackTransaction(transaction);
-                }
+            result = await func();
 
-                return result;
-          
+            if (result.IsSuccess)
+            {
+                await UnitOfWork.CommitTransaction(transaction);
+            }
+            else
+            {
+                await UnitOfWork.RollbackTransaction(transaction);
+            }
+
+            return result;
+
         }
 
         public async Task<T> executeAsyncone<T>(Func<Task<T>> func)
         {
-           var transaction = await UnitOfWork.BeginTransaction();
+            var transaction = await UnitOfWork.BeginTransaction();
             try
             {
-
                 T result = await func();
-              await UnitOfWork.CommitAsync();
-
+                await UnitOfWork.CommitAsync();
                 await UnitOfWork.CommitTransaction(transaction);
                 return result;
-
             }
 
             catch (Exception ex)

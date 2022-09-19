@@ -51,11 +51,10 @@ namespace PTP.Infrastructure.RequestAdapterPattern.Secuirity
             var result = (await _usersClient.RefreshToken(Header, TokenModel));
             if (result is null)
             {
-                throw new  BadRequestException();
+                throw new BadRequestException();
             }
             ResultEntity<LoginResultDtos> resultEntity = new ResultEntity<LoginResultDtos>(result.IsSuccess,
                          result.Message, result.Payload, result.StatusCode);
-
             return resultEntity;
         }
     }

@@ -15,7 +15,6 @@ namespace PTP.Infrastructure.AutoMapper
         {
             CreateMap<ClientDto, Cleint>();
             CreateMap<CreateUserDto, Users>();
-                
         }
 
     }

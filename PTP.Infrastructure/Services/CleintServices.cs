@@ -34,10 +34,10 @@ namespace PTP.Infrastructure.Services
 
         }
 
-        public Task<bool> CheckDuplicateUsername(string name)
+        public async Task<bool> CheckDuplicateUsername(string name)
         {
-            IEnumerable<Cleint> ClientUser = Task.Run(() => ClientRepository.GetAll()).Result; ;
-            return Task.FromResult(ClientUser.Where(x => x.username == name).Any());
+            IEnumerable<Cleint> ClientUser = await ClientRepository.GetAll() ;
+            return ClientUser.Where(x => x.username == name).Any();
         }
         public override async Task<int> Create(Cleint entity)
         {

@@ -20,10 +20,9 @@ namespace PTP.Infrastructure.EntitySpecification
 
         public override Expression<Func<Cleint, bool>> ToExpression()
         {
+
             return x =>
-            Task.FromResult(
-             _cleintServices.CheckDuplicateUsername(x.username).Result
-               ).Result;
+         _cleintServices.CheckDuplicateUsername(x.username).GetAwaiter().GetResult();
         }
     }
 }

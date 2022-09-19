@@ -30,13 +30,12 @@ namespace PTP.Infrastructure.Services
             _usersClient = userProxy;
             Config = config;
             _SecurityAdapterPattern = SecurityAdapterPattern;
-                this.CashService = CashService;
+            this.CashService = CashService;
         }
         public async Task<ResultEntity<LoginResultDtos>> Login(LoginDtos login)
         {
 
             //TO decoupled between Ptp and ProxyLayer Use Adapter Design Pattern
-            //Test The Redis Cash 
             var cashResult = await CashService.GetAsync<LoginResultDtos>(login.Username);
             if (cashResult != null)
             {
@@ -45,7 +44,7 @@ namespace PTP.Infrastructure.Services
                 return resultEntity;
             }
 
-       var result= await _SecurityAdapterPattern.securityLoginApiAdapter(login);
+            var result = await _SecurityAdapterPattern.securityLoginApiAdapter(login);
             await CashService.SetAsync<LoginResultDtos>(login.Username, result.Payload);
             return result;
 
