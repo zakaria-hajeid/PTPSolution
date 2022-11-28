@@ -27,7 +27,7 @@ namespace Security.percestance.Token
             _Db = Db;
             this.UnitOfwork = UnitOfwork;   
         }
-        public  Task<object> CreateToken(params object[] Credentials)
+        public async Task<object> CreateToken(params object[] Credentials)
         {
 
             Users loginInformation = (Users)Credentials[0];
@@ -60,8 +60,8 @@ namespace Security.percestance.Token
             loginInformation.RefreshToken = refreshToken;
             loginInformation.RefreshTokenExpiryTime = DateTime.Now.AddDays(10);
             _Db.Users.Update(loginInformation);
-            UnitOfwork.SaveCurrentChanges();
-            return Task.FromResult( new { token = tokens , refreshToken= refreshToken } as object);
+           await UnitOfwork.SaveCurrentChanges();
+            return await Task.FromResult( new { token = tokens , refreshToken= refreshToken } as object);
         }
     }
 }

@@ -15,9 +15,9 @@ namespace Security.percestance.Token.TokenCreateStrategy
             this.generateToken = generateToken;
         }
 
-        public Task<object> CreateToken (params object[] credentails)
+        public async Task<object> CreateToken (params object[] credentails)
         {
-           return generateToken.CreateToken(credentails);
+           return await generateToken.CreateToken(credentails);
         }
     }
 }

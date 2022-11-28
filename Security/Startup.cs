@@ -40,6 +40,7 @@ namespace Security
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors();
 
             services.RegisterServicesSecurity(Configuration);
             services.AddOptions();
@@ -77,7 +78,8 @@ namespace Security
             app.UseAuthentication();
             app.UseAuthorization();
 
-
+            app.UseCors(all => all.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+                            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

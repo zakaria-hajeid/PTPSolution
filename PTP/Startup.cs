@@ -22,6 +22,8 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using PTP.Hubs.UserHub;
+using Microsoft.AspNetCore.SignalR;
 
 namespace PTP
 {
@@ -41,13 +43,24 @@ namespace PTP
             {
                 options.JsonSerializerOptions.WriteIndented = true;
             }) ;
-           
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "Angular",
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowAnyOrigin();
+                });
+        });
+
             services.RegisterServices(Configuration);
             services.RegisteRefitSecurityServices(Configuration);
             services.AddSwaggerGen();
+         //   services.AddSignalR();
             //services.ConfigreRabitService(Configuration);
             services.ConfigreCashing(Configuration);
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
      .AddJwtBearer(Options =>
      {
@@ -85,6 +98,8 @@ namespace PTP
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("Angular");
+
             app.ConfigServiceseExtinsions();
             if (env.IsDevelopment())
             {
@@ -98,14 +113,16 @@ namespace PTP
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
+           
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+             //   endpoints.MapHub<UserHub>("/userHub");
+
             });
 
         }
