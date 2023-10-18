@@ -59,8 +59,9 @@ namespace PTP
             services.RegisteRefitSecurityServices(Configuration);
             services.AddSwaggerGen();
          //   services.AddSignalR();
-            //services.ConfigreRabitService(Configuration);
-            services.ConfigreCashing(Configuration);
+          //  services.ConfigreRabitService(Configuration);
+           // services.ConfigreCashing(Configuration);
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
      .AddJwtBearer(Options =>
      {
@@ -70,8 +71,8 @@ namespace PTP
              IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["Jwt:SecretKey"])),
              ValidateIssuer = false,
              ValidateLifetime = false,
-             ValidIssuer = Configuration["Jwt:Issuer"],
-             ValidAudience = Configuration["Jwt:Audience"],
+             ValidIssuer = Configuration["Jwt:Issuer"], //source to validate my token 
+             ValidAudience = Configuration["Jwt:Audience"], // me 
          };
      });
 

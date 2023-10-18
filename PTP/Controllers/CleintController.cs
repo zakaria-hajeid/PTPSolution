@@ -10,6 +10,7 @@ using PTP.Core.Entitys;
 using PTP.Core.Servecis;
 using PTP.Core.Specification;
 using PTP.Infrastructure.Proxies.Request;
+using PTP.Queing.Meassage;
 using PTP.Queuing.RabbitMqService.Services;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -46,22 +47,22 @@ namespace PTP.Controllers
         [HttpPost("AddUsr")]
         public async Task<IActionResult> addUsr([FromBody] CreateUserRequest entity)
         {
-            ResultEntity<int> Response = await cleintServices.CretaUserWithRefit(entity);
-            return StatusCode(StatusCodes.Status201Created, Response);
+           // ResultEntity<int> Response = await cleintServices.CretaUserWithRefit(entity);
+            //return StatusCode(StatusCodes.Status201Created, Response);
 
             // move this commaent to speacefic service and ad the streategy pattern to create
             // speacfic type of MQ meassage;
 
-            /*  CreateUserMessage message = new CreateUserMessage()
+              CreateUserMessage message = new CreateUserMessage()
               {
                   Name = entity.name,
-                  UserName = entity.UserName,
                   Password = entity.Password,
               };
               var serviceCollection = new ServiceCollection();
               IServiceProvider ServiceProvider=serviceCollection.BuildServiceProvider();
               var Publisher = contextAccessor.HttpContext.RequestServices.GetService<IQuenigService<CreateUserMessage>>();
-             await Publisher.PublishToMQ(message); */
+             await Publisher.PublishToMQ(message);
+            return Ok();
         }
         protected ICleintServices cleintServices
         {

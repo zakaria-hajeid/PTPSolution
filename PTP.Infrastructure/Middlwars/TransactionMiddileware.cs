@@ -23,7 +23,7 @@ namespace PTP.Infrastructure.Middlwars
             {
                 DataContext DbCotextInstance = (DataContext)context.RequestServices.GetService(typeof(DataContext));
                 IUnitOfWork<DataContext> _unitOfWork = (IUnitOfWork<DataContext>)context.RequestServices
-                    .GetService(typeof(IUnitOfWork<DataContext>));
+                .GetService(typeof(IUnitOfWork<DataContext>));
                 _unitOfWork.context = DbCotextInstance;
 
                 if (_unitOfWork.context != null)

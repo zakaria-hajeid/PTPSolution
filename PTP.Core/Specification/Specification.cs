@@ -14,7 +14,13 @@ namespace PTP.Core.Specification
             return predicate(entity);
         }
 
+       // delegate Di =
         public abstract Expression<Func<T, bool>> ToExpression();
 
+
+        public void ss()
+        {
+
+        }
     }
 }
