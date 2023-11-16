@@ -14,13 +14,4 @@
     <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="KoalaKit.Abstractions">
-      <HintPath>C:\Users\Zakariaba.MOJ\source\repos\koalakit-core\src\messaging\queuing\KoalaKit.Queuing.RabbitMq\bin\Debug\net6.0\KoalaKit.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="KoalaKit.Queuing.RabbitMq">
-      <HintPath>C:\Users\Zakariaba.MOJ\source\repos\koalakit-core\src\messaging\queuing\KoalaKit.Queuing.RabbitMq\bin\Debug\net6.0\KoalaKit.Queuing.RabbitMq.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

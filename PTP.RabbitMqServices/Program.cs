@@ -20,9 +20,9 @@ namespace PTP.RabbitMqServices
 
 
             var host = CreateHostBuilder(args).Build();
-            host.UseQueuingRabbitMqConsumers(
-             typeof(CreateUserMessage)
-             );
+       /*   host.UseQueuingRabbitMqConsumers(
+             typeof(CreateUserMessage);
+             );*/
             host.Run();
 
 
@@ -37,7 +37,7 @@ namespace PTP.RabbitMqServices
     })
     .ConfigureServices((hostContext, services) =>
     {
-        services.ConfigreRabitService(hostContext.Configuration);
+       // services.ConfigreRabitService(hostContext.Configuration);
 
         services.ConfigreRabitHandlersServices();
     });

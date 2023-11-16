@@ -1,5 +1,4 @@
-﻿using KoalaKit.Extensions;
-using KoalaKit.Queuing.RabbitMq;
+﻿
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PTP.Queuing.RabbitMqService.Services;
@@ -13,11 +12,12 @@ namespace PTP.Queuing.RabbitMqService.Extinsions
 {
     public static class RabitMqExtision
     {
-        public static  void ConfigreRabitService(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddKoalaKitCore(configuration, builder => builder.AddModules(typeof(RabbitMqModule)));
+        /*  public static  void ConfigreRabitService(this IServiceCollection services, IConfiguration configuration)
+          {
+              services.AddKoalaKitCore(configuration, builder => builder.AddModules(typeof(RabbitMqModule)));
 
-            services.AddScoped(typeof(IQuenigService<>), typeof(QueingService<>));
-        }
+              services.AddScoped(typeof(IQuenigService<>), typeof(QueingService<>));
+          }
+      }*/
     }
 }

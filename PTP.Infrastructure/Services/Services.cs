@@ -50,12 +50,11 @@ namespace PTP.Infrastructure.Services
                 await UnitOfWork.CommitTransaction(transaction);
                 return result;
             }
-
             catch (Exception ex)
             {
-                //await UnitOfWork.RollbackTransaction(transaction);
+                await UnitOfWork.RollbackTransaction(transaction);
                 //go to log file 
-                throw;
+                throw ex;
 
             }
 

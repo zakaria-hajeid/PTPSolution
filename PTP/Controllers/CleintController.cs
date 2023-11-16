@@ -11,7 +11,6 @@ using PTP.Core.Servecis;
 using PTP.Core.Specification;
 using PTP.Infrastructure.Proxies.Request;
 using PTP.Queing.Meassage;
-using PTP.Queuing.RabbitMqService.Services;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -23,11 +22,9 @@ namespace PTP.Controllers
     public class CleintController : BaseConroler<Cleint, CleintFilter>
     {
         private readonly IHttpContextAccessor contextAccessor;
-        public CleintController(ICleintServices Service, ILogger<Cleint> loger, IMapper _mapper
-            , Specification<Cleint> specification, IHttpContextAccessor contextAccessor
-            ) : base(Service, loger, _mapper, specification)
+        public CleintController(ICleintServices Service, ILogger<Cleint> loger, IMapper _mapper , Specification<Cleint> specification, IHttpContextAccessor contextAccessor ) : base(Service, loger, _mapper, specification)
         {
-                this.contextAccessor = contextAccessor;
+            this.contextAccessor = contextAccessor;
         }
 
         [HttpPost("Add")]
@@ -42,27 +39,36 @@ namespace PTP.Controllers
 
 
         }
-        //move to auth this for register a user
+        //using third party(Security Microservice) with  auth token 
         [AllowAnonymous]
         [HttpPost("AddUsr")]
         public async Task<IActionResult> addUsr([FromBody] CreateUserRequest entity)
         {
-           // ResultEntity<int> Response = await cleintServices.CretaUserWithRefit(entity);
-            //return StatusCode(StatusCodes.Status201Created, Response);
+            ResultEntity<int> Response = await cleintServices.CretaUserWithRefit(entity);
+            if (Response.IsSuccess)
+            {
+                return StatusCode(StatusCodes.Status201Created, Response);
+
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, Response);
+
+            }
 
             // move this commaent to speacefic service and ad the streategy pattern to create
             // speacfic type of MQ meassage;
 
-              CreateUserMessage message = new CreateUserMessage()
-              {
-                  Name = entity.name,
-                  Password = entity.Password,
-              };
-              var serviceCollection = new ServiceCollection();
+            /* CreateUserMessage message = new CreateUserMessage()
+               {
+                   Name = entity.name,
+                   Password = entity.Password,
+               };
+               var serviceCollection = new ServiceCollection();
               IServiceProvider ServiceProvider=serviceCollection.BuildServiceProvider();
-              var Publisher = contextAccessor.HttpContext.RequestServices.GetService<IQuenigService<CreateUserMessage>>();
-             await Publisher.PublishToMQ(message);
-            return Ok();
+               /*var Publisher = contextAccessor.HttpContext.RequestServices.GetService<IQuenigService<CreateUserMessage>>();
+              await Publisher.PublishToMQ(message);
+             return Ok();*/
         }
         protected ICleintServices cleintServices
         {
@@ -70,14 +76,5 @@ namespace PTP.Controllers
         }
 
 
-      
-
-        // [HttpGet("{id}")]
-        /* public async Task<IActionResult> add(int id)
-         {
-
-             return StatusCode(StatusCodes.Status201Created, id);
-         }
-        */
     }
 }

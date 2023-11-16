@@ -1,5 +1,4 @@
-﻿using KoalaKit.Messaging.Queuing;
-using PTP.Queuing.RabbitMqService.Services;
+﻿using PTP.Queuing.RabbitMqService.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Text.Json;
 
 namespace PTP.Queuing.RabbitMqService
 {
-    public class QueingService<TMessage> : IQuenigService<TMessage>
+   /* public class QueingService<TMessage> : IQuenigService<TMessage>
            where TMessage : IQueuingMessage, new()
     {
         private readonly IMessageQueuingPublisher<TMessage> MessageQueuingPublisher;
@@ -24,5 +23,5 @@ namespace PTP.Queuing.RabbitMqService
 
 
         }
-    }
+    }*/
 }
