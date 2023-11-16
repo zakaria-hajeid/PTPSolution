@@ -15,9 +15,9 @@ namespace PTP.DistributedCash.Extinsions
     {
         public static void ConfigreCashing(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddKoalaKitCore(configuration, builder => builder.AddModules(typeof(KoalaRedisCacheModule)));
+           /* services.AddKoalaKitCore(configuration, builder => builder.AddModules(typeof(KoalaRedisCacheModule)));
             services.AddScoped<ICashService, CaahService>();
-
+           */
 
         }
     }
